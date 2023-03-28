@@ -1,10 +1,13 @@
 import { Typography, Button, Container, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel } from "@mui/material"
 import { useState } from "react"
-import { LoginData, sendLoginData } from "../features/authSlice"
+import { useNavigate } from "react-router-dom"
+import { LoginData, sendLoginData, setUser } from "../features/authSlice"
 import { useAppDispatch } from "../redux/redux"
 
 const Login = () => {
   const dispatch = useAppDispatch()
+
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState<LoginData>({
     username: "",
@@ -30,6 +33,10 @@ const Login = () => {
     const {username, password} = formData
     if (username && password) {
       dispatch(sendLoginData(formData))
+      dispatch(setUser(username))
+      setTimeout(() => {
+        navigate('/table')
+      }, 1000)
       console.log(username, password)
     } else if (!username && !password) {
       setUsernameError(true)
@@ -49,7 +56,7 @@ const Login = () => {
         color="textSecondary"
         gutterBottom
       >
-        Форма входа
+        Вход
       </Typography>
 
       <form noValidate onSubmit={handleSubmit}>

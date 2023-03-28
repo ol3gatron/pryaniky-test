@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export interface LoginData {
@@ -7,12 +7,14 @@ export interface LoginData {
 }
 
 export interface InitialState {
-  token: "",
+  username: string,
+  token: string,
 }
 
 const HOST = "https://test.v5.pryaniky.com"
 
 const initialState: InitialState = {
+  username: "",
   token: "",
 }
 
@@ -31,12 +33,19 @@ export const sendLoginData = createAsyncThunk("auth/sendLoginData", async (login
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action: PayloadAction<string>) => {
+      state.username = action.payload
+    }
+  },
   extraReducers(builder) {
     builder.addCase(sendLoginData.fulfilled, (state, action) => {
       localStorage.setItem("token", JSON.stringify(action.payload.data.token))
+      state.token = action.payload.data.token
     })
   }
 })
+
+export const { setUser } = authSlice.actions
 
 export default authSlice.reducer
