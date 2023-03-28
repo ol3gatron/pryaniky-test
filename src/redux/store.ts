@@ -1,9 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import authReducer from "../features/authSlice"
+import docsReducer from "../features/docsSlice"
 
 
 const rootReducer = combineReducers({
   authReducer,
+  docsReducer,
 })
 
 export const setupStore = () => {
@@ -15,6 +17,7 @@ export const setupStore = () => {
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    docs: docsReducer,
   }
 })
 

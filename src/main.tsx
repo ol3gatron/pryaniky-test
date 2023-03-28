@@ -4,6 +4,7 @@ import App from './App'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { setupStore } from "./redux/store"
 import { Provider } from "react-redux"
+import { fetchDocs } from './features/docsSlice'
 
 const store = setupStore()
 

@@ -11,7 +11,7 @@ export interface InitialState {
   token: string,
 }
 
-const HOST = "https://test.v5.pryaniky.com"
+export const HOST = "https://test.v5.pryaniky.com"
 
 const initialState: InitialState = {
   username: "",
