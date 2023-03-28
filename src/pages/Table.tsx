@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Spinner from "../components/Spinner"
+import TableComponent from "../components/TableComponent"
 import { fetchDocs, Doc } from "../features/docsSlice"
 import { useAppDispatch, useAppSelector } from "../redux/redux"
+import Box from '@mui/material/Box';
 
 const Table = () => {
   const dispatch = useAppDispatch()
@@ -29,16 +31,10 @@ const Table = () => {
     return <Spinner />
   }
 
-  console.log(docs)
-
   return (
-    <div>
-      {docs.map((doc) => {
-        return (
-          <h1 key={doc.id}>{doc.documentName}</h1>
-        )
-      })}
-    </div>
+    <Box>
+      <TableComponent data={docs} />
+    </Box>
   )
 }
 export default Table
