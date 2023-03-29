@@ -19,8 +19,6 @@ const Table = () => {
 
   const docs = useAppSelector(state => state.docsReducer.docs)
 
-  console.log(docs)
-
   const handleOpen = () => {
     setIsOpen(true)
   }
@@ -49,13 +47,6 @@ const Table = () => {
   return (
     <Box>
       <TableComponent data={docs} />
-      {/* <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpen}
-      >
-        Добавить
-      </Button> */}
       <IconButton
         aria-label="add"
         color="primary"

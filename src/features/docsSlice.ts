@@ -3,6 +3,8 @@ import axios from "axios";
 import { HOST } from "./authSlice";
 import { ToastContainer, toast } from 'react-toastify';
 
+const token = localStorage.getItem("token")?.slice(1, 28)
+
 export interface Doc {
   id?: string,
   documentStatus: string,
@@ -24,12 +26,20 @@ export const fetchDocs = createAsyncThunk("docs/fetchDocs", async (token: string
 })
 
 export const addDoc = createAsyncThunk("docs/addDoc", async (doc: Doc) => {
+  const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/create`, doc, {headers : {"x-auth": token}})
+
+  return res.data
+})
+
+export const deleteDoc = createAsyncThunk("docs/deleteDoc", async (doc: Doc) => {
   try {
-    const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/create`, doc, {headers : {"x-auth": "supersecrettoken_for_user13"}})
+    const res = await axios.delete(`${HOST}/ru/data/v3/testmethods/docs/userdocs/delete/${doc.id}`, {headers: {"x-auth": "supersecrettoken_for_user13"}})
+
     return res.data
   } catch (error) {
-
+    return error
   }
+
 })
 
 interface DocsState {
@@ -46,22 +56,31 @@ export const docsSlice = createSlice({
   reducers: {
     docAdded: (state, action) => {
       state.docs.push(action.payload.data)
+    },
+    docDeleted: (state, action) => {
+      console.log(action.payload)
+
+      const docs = state.docs.filter((doc) => doc.id !== action.payload.id)
+      state.docs = docs
     }
   },
   extraReducers(builder) {
     builder
     .addCase(fetchDocs.fulfilled, (state, action) => {
-      // return action.payload.data
-
       state.docs = action.payload.data
     })
     .addCase(addDoc.fulfilled, (state, action) => {
-      action.payload.id = nanoid()
+      console.log(action.payload.data)
 
       state.docs.push(action.payload.data)
-      console.log(state.docs)
+    })
+    .addCase(deleteDoc.fulfilled, (state, action) => {
+      console.log(action.payload.data)
+
     })
   },
 })
 
 export default docsSlice.reducer
+
+export const { docDeleted } = docsSlice.actions

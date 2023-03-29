@@ -7,13 +7,24 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material/';
 
-import { Doc } from "../features/docsSlice"
+import { deleteDoc, Doc, docDeleted } from "../features/docsSlice"
+import { useAppDispatch } from '../redux/redux';
 
 interface Props {
   data: Doc[]
 }
 
+
 const TableComponent = ({data}: Props) => {
+  const dispatch = useAppDispatch()
+
+  const handleDelete = (doc: Doc) => {
+    console.log(doc.id)
+
+    dispatch(deleteDoc(doc))
+    dispatch(docDeleted(doc))
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
@@ -47,8 +58,8 @@ const TableComponent = ({data}: Props) => {
               <TableCell align="center">{doc.employeeSigDate}</TableCell>
               <TableCell align="center">{doc.companySigDate}</TableCell>
               <TableCell align="center">
-                <EditIcon onClick={() => console.log(doc.id)}/>
-                <DeleteIcon onClick={() => console.log(doc.id)} />
+                <EditIcon onClick={() => console.log(doc)}/>
+                <DeleteIcon onClick={() => handleDelete(doc)} />
               </TableCell>
             </TableRow>
           ))}

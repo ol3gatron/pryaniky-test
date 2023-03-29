@@ -11,6 +11,7 @@ const Form = ({ handleClose }: Props) => {
   const dispatch = useAppDispatch()
 
   const event = new Date()
+  const token = localStorage.getItem("token")?.slice(1, 28)
 
   const [formData, setFormData] = useState({
     documentStatus: "",
