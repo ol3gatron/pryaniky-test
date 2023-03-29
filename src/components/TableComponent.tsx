@@ -47,7 +47,7 @@ const TableComponent = ({data}: Props) => {
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} >
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -79,8 +79,16 @@ const TableComponent = ({data}: Props) => {
               <TableCell align="center">{doc.employeeSigDate}</TableCell>
               <TableCell align="center">{doc.companySigDate}</TableCell>
               <TableCell align="center">
-                <EditIcon fontSize='small' onClick={() => handleEdit(doc)}/>
-                <DeleteIcon fontSize='small' onClick={() => handleDelete(doc)} />
+                <EditIcon
+                  fontSize='small'
+                  sx={{cursor: "pointer"}}
+                  onClick={() => handleEdit(doc)}
+                />
+                <DeleteIcon
+                  fontSize='small'
+                  sx={{cursor: "pointer"}}
+                  onClick={() => handleDelete(doc)}
+                />
               </TableCell>
             </TableRow>
           ))}

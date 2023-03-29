@@ -38,7 +38,7 @@ const Form = ({ handleClose, data }: Props) => {
     e.preventDefault()
     handleClose()
     if (mode === "add") {
-      dispatch(addDoc(formData))
+      // dispatch(addDoc(formData))
       dispatch(docAdded(formData))
     } else if (mode === "edit") {
       dispatch(docEdit(formData))

@@ -41,7 +41,7 @@ const Table = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{overflowX: "scroll"}}>
       <TableComponent data={docs} />
       <IconButton
         aria-label="add"
