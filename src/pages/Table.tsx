@@ -14,10 +14,10 @@ const Table = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const docs = useAppSelector(state => state.docsReducer.docs)
+  const status = useAppSelector(state => state.docsReducer.status)
 
   const handleOpen = () => {
     setIsOpen(true)
@@ -33,14 +33,10 @@ const Table = () => {
     } else {
       const token = localStorage.getItem("token")?.slice(1, 28)
       dispatch(fetchDocs(token))
-
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
     }
   }, [])
 
-  if (isLoading) {
+  if (status === "loading") {
     return <Spinner />
   }
 

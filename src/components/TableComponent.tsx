@@ -6,9 +6,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material/';
-
+import ModalDialog from "../components/ModalDialog"
 import { deleteDoc, Doc, docDeleted } from "../features/docsSlice"
-import { useAppDispatch } from '../redux/redux';
+import { useAppDispatch, useAppSelector } from '../redux/redux';
+import { useState } from 'react';
 
 interface Props {
   data: Doc[]
@@ -17,12 +18,32 @@ interface Props {
 
 const TableComponent = ({data}: Props) => {
   const dispatch = useAppDispatch()
+  const documents = useAppSelector(state => state.docsReducer.docs)
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [document, setDocument] = useState<any>()
+
+  const handleOpen = () => {
+    setIsOpen(true)
+  }
+
+  const handleClose = () => {
+    setIsOpen(false)
+  }
 
   const handleDelete = (doc: Doc) => {
-    console.log(doc.id)
-
     dispatch(deleteDoc(doc))
     dispatch(docDeleted(doc))
+  }
+
+  const getDocument = (doc: Doc) => {
+    const document = documents.find((docu) => docu.id == doc.id)
+    setDocument(document)
+  }
+
+  const handleEdit = (doc: Doc) => {
+    getDocument(doc)
+    setIsOpen(true)
   }
 
   return (
@@ -58,13 +79,14 @@ const TableComponent = ({data}: Props) => {
               <TableCell align="center">{doc.employeeSigDate}</TableCell>
               <TableCell align="center">{doc.companySigDate}</TableCell>
               <TableCell align="center">
-                <EditIcon onClick={() => console.log(doc)}/>
-                <DeleteIcon onClick={() => handleDelete(doc)} />
+                <EditIcon fontSize='small' onClick={() => handleEdit(doc)}/>
+                <DeleteIcon fontSize='small' onClick={() => handleDelete(doc)} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <ModalDialog open={isOpen} handleClose={handleClose} data={document}/>
     </TableContainer>
   )
 }

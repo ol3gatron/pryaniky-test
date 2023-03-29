@@ -1,13 +1,14 @@
 import { Typography, Button, Container, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel } from "@mui/material"
-import { useState } from "react"
-import { addDoc } from "../features/docsSlice"
+import { useEffect, useState } from "react"
+import { addDoc, docAdded, docEdit } from "../features/docsSlice"
 import { useAppDispatch } from "../redux/redux"
 
 interface Props {
-  handleClose: () => void
+  handleClose: () => void,
+  data: any,
 }
 
-const Form = ({ handleClose }: Props) => {
+const Form = ({ handleClose, data }: Props) => {
   const dispatch = useAppDispatch()
 
   const event = new Date()
@@ -24,11 +25,24 @@ const Form = ({ handleClose }: Props) => {
     companySigDate: event.toISOString(),
   })
 
+  const [mode, setMode] = useState("add")
+
+  useEffect(() => {
+    if (data && data.id.length > 1) {
+      setMode("edit")
+      setFormData(data)
+    }
+  }, [])
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
-    console.log(formData)
     handleClose()
-    dispatch(addDoc(formData))
+    if (mode === "add") {
+      dispatch(addDoc(formData))
+      dispatch(docAdded(formData))
+    } else if (mode === "edit") {
+      dispatch(docEdit(formData))
+    }
   }
 
   const handleChange = (e: any) => {
@@ -131,7 +145,7 @@ const Form = ({ handleClose }: Props) => {
           type="submit"
           sx={{margin: "1rem"}}
         >
-          Добавить
+          {mode === "edit" ? "Изменить" : "Добавить"}
         </Button>
       </div>
     </form>

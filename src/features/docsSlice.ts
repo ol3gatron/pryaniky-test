@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { HOST } from "./authSlice";
-import { ToastContainer, toast } from 'react-toastify';
 
 const token = localStorage.getItem("token")?.slice(1, 28)
 
@@ -43,11 +42,82 @@ export const deleteDoc = createAsyncThunk("docs/deleteDoc", async (doc: Doc) => 
 })
 
 interface DocsState {
-  docs: Doc[]
+  docs: Doc[],
+  status: "loading" | "ready"
 }
 
+const event = new Date()
+
 const initialState: DocsState = {
-  docs: []
+  docs: [
+    {
+      id: nanoid(),
+      documentStatus: "ready",
+      employeeNumber: "hired",
+      documentType: "decree",
+      documentName: "yeah",
+      companySignatureName: "pryaniky",
+      employeeSignatureName: "oleg",
+      employeeSigDate: event.toISOString(),
+      companySigDate: event.toISOString(),
+    },
+    {
+      id: nanoid(),
+      documentStatus: "ready",
+      employeeNumber: "hired",
+      documentType: "decree",
+      documentName: "yeah",
+      companySignatureName: "pryaniky",
+      employeeSignatureName: "oleg",
+      employeeSigDate: event.toISOString(),
+      companySigDate: event.toISOString(),
+    },
+    {
+      id: nanoid(),
+      documentStatus: "ready",
+      employeeNumber: "hired",
+      documentType: "decree",
+      documentName: "yeah",
+      companySignatureName: "pryaniky",
+      employeeSignatureName: "oleg",
+      employeeSigDate: event.toISOString(),
+      companySigDate: event.toISOString(),
+    },
+    {
+      id: nanoid(),
+      documentStatus: "ready",
+      employeeNumber: "hired",
+      documentType: "decree",
+      documentName: "yeah",
+      companySignatureName: "pryaniky",
+      employeeSignatureName: "oleg",
+      employeeSigDate: event.toISOString(),
+      companySigDate: event.toISOString(),
+    },
+    {
+      id: nanoid(),
+      documentStatus: "ready",
+      employeeNumber: "hired",
+      documentType: "decree",
+      documentName: "yeah",
+      companySignatureName: "pryaniky",
+      employeeSignatureName: "oleg",
+      employeeSigDate: event.toISOString(),
+      companySigDate: event.toISOString(),
+    },
+    {
+      id: nanoid(),
+      documentStatus: "ready",
+      employeeNumber: "hired",
+      documentType: "decree",
+      documentName: "yeah",
+      companySignatureName: "pryaniky",
+      employeeSignatureName: "oleg",
+      employeeSigDate: event.toISOString(),
+      companySigDate: event.toISOString(),
+    },
+  ],
+  status: "ready"
 }
 
 export const docsSlice = createSlice({
@@ -55,32 +125,37 @@ export const docsSlice = createSlice({
   initialState,
   reducers: {
     docAdded: (state, action) => {
-      state.docs.push(action.payload.data)
+      action.payload.id = nanoid()
+      state.docs.push(action.payload)
     },
     docDeleted: (state, action) => {
-      console.log(action.payload)
-
       const docs = state.docs.filter((doc) => doc.id !== action.payload.id)
       state.docs = docs
+    },
+    docEdit: (state, action) => {
+      const { id } = action.payload
+      action.payload.employeeSigDate = new Date().toISOString()
+      action.payload.companySigDate = new Date().toISOString()
+
+      const docs = state.docs.filter((doc) => doc.id !== id)
+      console.log(action.payload)
+      state.docs = [...docs, action.payload]
     }
   },
   extraReducers(builder) {
     builder
     .addCase(fetchDocs.fulfilled, (state, action) => {
       state.docs = action.payload.data
+      state.status = "ready"
     })
     .addCase(addDoc.fulfilled, (state, action) => {
-      console.log(action.payload.data)
-
       state.docs.push(action.payload.data)
     })
     .addCase(deleteDoc.fulfilled, (state, action) => {
-      console.log(action.payload.data)
-
     })
   },
 })
 
 export default docsSlice.reducer
 
-export const { docDeleted } = docsSlice.actions
+export const { docAdded, docEdit, docDeleted } = docsSlice.actions
