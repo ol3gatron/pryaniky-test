@@ -1,11 +1,17 @@
 import { Typography, Button, Container, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel } from "@mui/material"
 import { useState } from "react"
+import { addDoc } from "../features/docsSlice"
+import { useAppDispatch } from "../redux/redux"
 
 interface Props {
   handleClose: () => void
 }
 
 const Form = ({ handleClose }: Props) => {
+  const dispatch = useAppDispatch()
+
+  const event = new Date()
+
   const [formData, setFormData] = useState({
     documentStatus: "",
     employeeNumber: "",
@@ -13,13 +19,15 @@ const Form = ({ handleClose }: Props) => {
     documentName: "",
     companySignatureName: "",
     employeeSignatureName: "",
-
+    employeeSigDate: event.toISOString(),
+    companySigDate: event.toISOString(),
   })
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     console.log(formData)
     handleClose()
+    dispatch(addDoc(formData))
   }
 
   const handleChange = (e: any) => {
@@ -30,7 +38,11 @@ const Form = ({ handleClose }: Props) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{padding: "2rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+    <form
+      autoComplete="off"
+      onSubmit={handleSubmit}
+      style={{padding: "2rem", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}
+    >
       <TextField
         label="documentStatus"
         name="documentStatus"
@@ -88,11 +100,38 @@ const Form = ({ handleClose }: Props) => {
         onChange={handleChange}
         value={formData.employeeSignatureName}
       />
-      {/* <TextField label="employeeSigDate" name="employeeSigDate" variant="filled" required fullWidth sx={{margin: "1rem", width: 300}}/>
-      <TextField label="companySigDate" name="companySigDate" variant="filled" required fullWidth sx={{margin: "1rem", width: 300}}/> */}
+      {/* <TextField
+        label="employeeSigDate"
+        name="employeeSigDate"
+        variant="filled"
+        required
+        fullWidth
+        sx={{margin: "1rem", width: 300}}
+      />
+      <TextField
+        label="companySigDate"
+        name="companySigDate"
+        variant="filled"
+        required
+        fullWidth sx={{margin: "1rem", width: 300}}
+      /> */}
       <div>
-        <Button variant="contained" color="secondary" sx={{margin: "1rem"}}>Закрыть</Button>
-        <Button variant="contained" color="primary" type="submit" sx={{margin: "1rem"}}>Добавить</Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          sx={{margin: "1rem"}}
+          onClick={handleClose}
+        >
+          Закрыть
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{margin: "1rem"}}
+        >
+          Добавить
+        </Button>
       </div>
     </form>
   )
