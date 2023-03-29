@@ -24,7 +24,7 @@ const Login = () => {
     }))
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
 
     setUsernameError(false)

@@ -5,15 +5,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material/';
 
 import { Doc } from "../features/docsSlice"
 
-const TableComponent = (data: any) => {
-  console.log(data)
+interface Props {
+  data: Doc[]
+}
 
+const TableComponent = ({data}: Props) => {
   return (
     <TableContainer component={Paper}>
-      <Table  aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="center">id</TableCell>
@@ -25,10 +28,11 @@ const TableComponent = (data: any) => {
             <TableCell align="center">employeeSignatureName</TableCell>
             <TableCell align="center">employeeSigDate</TableCell>
             <TableCell align="center">companySigDate</TableCell>
+            <TableCell align="center">actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.data.map((doc: Doc) => (
+          {data.map((doc: Doc) => (
             <TableRow
               key={doc.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -42,6 +46,10 @@ const TableComponent = (data: any) => {
               <TableCell align="center">{doc.employeeSignatureName}</TableCell>
               <TableCell align="center">{doc.employeeSigDate}</TableCell>
               <TableCell align="center">{doc.companySigDate}</TableCell>
+              <TableCell align="center">
+                <EditIcon onClick={() => console.log(doc.id)}/>
+                <DeleteIcon onClick={() => console.log(doc.id)} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
