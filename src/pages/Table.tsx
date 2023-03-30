@@ -2,12 +2,12 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Spinner from "../components/Spinner"
 import TableComponent from "../components/TableComponent"
-import { fetchDocs } from "../features/docsSlice"
+import { changeStatus, fetchDocs } from "../features/docsSlice"
 import { useAppDispatch, useAppSelector } from "../redux/redux"
 import Box from '@mui/material/Box';
 import ModalDialog from "../components/ModalDialog"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button, IconButton } from "@mui/material"
+import { Typography, Button, IconButton } from "@mui/material"
 
 const Table = () => {
   const dispatch = useAppDispatch()
@@ -41,6 +41,7 @@ const Table = () => {
 
   const handleExit = () => {
     localStorage.clear()
+    dispatch(changeStatus("loading"))
     navigate("/")
   }
 
