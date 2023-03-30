@@ -6,8 +6,8 @@ import { fetchDocs } from "../features/docsSlice"
 import { useAppDispatch, useAppSelector } from "../redux/redux"
 import Box from '@mui/material/Box';
 import ModalDialog from "../components/ModalDialog"
-import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Button, IconButton } from "@mui/material"
 
 const Table = () => {
   const dispatch = useAppDispatch()
@@ -39,8 +39,20 @@ const Table = () => {
     return <Spinner />
   }
 
+  const handleExit = () => {
+    localStorage.clear()
+    navigate("/")
+  }
+
   return (
     <Box sx={{overflowX: "scroll"}}>
+      <Button
+          variant="contained"
+          color="primary"
+          onClick={handleExit}
+      >
+          Выйти
+      </Button>
       <TableComponent data={docs} />
       <IconButton
         aria-label="add"
