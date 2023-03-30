@@ -82,11 +82,13 @@ const TableComponent = ({data}: Props) => {
                 <EditIcon
                   fontSize='small'
                   sx={{cursor: "pointer"}}
+                  color='info'
                   onClick={() => handleEdit(doc)}
                 />
                 <DeleteIcon
                   fontSize='small'
                   sx={{cursor: "pointer"}}
+                  color="error"
                   onClick={() => handleDelete(doc)}
                 />
               </TableCell>

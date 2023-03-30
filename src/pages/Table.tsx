@@ -33,6 +33,8 @@ const Table = () => {
     } else {
       const token = localStorage.getItem("token")?.slice(1, 28)
       dispatch(fetchDocs(token))
+    } return () => {
+      dispatch(changeStatus("loading"))
     }
   }, [])
 
