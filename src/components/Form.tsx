@@ -5,7 +5,7 @@ import { useAppDispatch } from "../redux/redux"
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
 interface Props {
   handleClose: () => void,
@@ -24,12 +24,12 @@ const Form = ({ handleClose, data }: Props) => {
     documentName: "",
     companySignatureName: "",
     employeeSignatureName: "",
-    employeeSigDate: event.toISOString(),
-    companySigDate: event.toISOString(),
+    employeeSigDate: "",
+    companySigDate: "",
   })
 
-  const [employeeSigDate, setEmployeeSigDate] = useState<Dayjs | null>(null)
-  const [companySigDate, setCompanySigDate] = useState<Dayjs | null>(null)
+  const [employeeSigDate, setEmployeeSigDate] = useState<Dayjs | null>(dayjs())
+  const [companySigDate, setCompanySigDate] = useState<Dayjs | null>(dayjs())
 
   const [mode, setMode] = useState("add")
 
@@ -40,6 +40,13 @@ const Form = ({ handleClose, data }: Props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (mode === 'edit') {
+    setEmployeeSigDate(dayjs(formData.employeeSigDate))
+    setCompanySigDate(dayjs(formData.companySigDate))
+    }
+  }, [formData])
+
 
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -48,32 +55,13 @@ const Form = ({ handleClose, data }: Props) => {
 
     if (mode === "add") {
       dispatch(changeStatus("loading"))
-
-      if (employeeSigDate && companySigDate) {
-        const newData = {
-          ...formData,
-          employeeSigDate: employeeSigDate?.toISOString(),
-          companySigDate: companySigDate?.toISOString(),
-        }
-
-        dispatch(addDoc(newData))
-      } else if (employeeSigDate) {
-        const newData = {
-          ...formData,
-          employeeSigDate: employeeSigDate?.toISOString(),
-        }
-
-        dispatch(addDoc(newData))
-      } else if (companySigDate) {
-        const newData = {
-          ...formData,
-          companySigDate: companySigDate?.toISOString(),
-        }
-
-        dispatch(addDoc(newData))
-      } else {
-        dispatch(addDoc(formData))
+      const newData = {
+        ...formData,
+        employeeSigDate: employeeSigDate?.toISOString(),
+        companySigDate: companySigDate?.toISOString(),
       }
+
+      dispatch(addDoc(newData))
     } else if (mode === "edit") {
       dispatch(changeStatus("loading"))
       // dispatch(editDoc(formData))
@@ -84,8 +72,6 @@ const Form = ({ handleClose, data }: Props) => {
           employeeSigDate: employeeSigDate?.toISOString(),
           companySigDate: companySigDate?.toISOString(),
         }
-
-        console.log(newData)
 
         dispatch(editDoc(newData))
       } else if (employeeSigDate) {
@@ -107,6 +93,8 @@ const Form = ({ handleClose, data }: Props) => {
       }
     }
   }
+
+  console.log(companySigDate)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prevFormData) => ({
@@ -185,12 +173,14 @@ const Form = ({ handleClose, data }: Props) => {
            label="employeeSigDate"
            value={employeeSigDate}
            onChange={(newValue) => setEmployeeSigDate(newValue)}
+           format="DD / MM / YYYY"
          />
          <DatePicker
            sx={{margin: "1rem", width: 300}}
            label="companySigDate"
            value={companySigDate}
            onChange={(newValue) => setCompanySigDate(newValue)}
+           format="DD / MM / YYYY"
          />
        </LocalizationProvider>
       <div>
