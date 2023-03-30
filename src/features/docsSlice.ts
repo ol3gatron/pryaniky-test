@@ -34,7 +34,7 @@ export const addDoc = createAsyncThunk("docs/addDoc", async (doc: Doc) => {
   try {
     const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/create`, doc,
     {headers: {
-      "x-auth": "supersecrettoken_for_user13"
+      "x-auth": localStorage.getItem("token")?.slice(1, 28)
       }
     })
 
