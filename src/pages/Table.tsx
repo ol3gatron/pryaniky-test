@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import ModalDialog from "../components/ModalDialog"
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Typography, Button, IconButton } from "@mui/material"
+import ResponsiveAppBar from "../components/Header"
 
 const Table = () => {
   const dispatch = useAppDispatch()
@@ -39,21 +40,8 @@ const Table = () => {
     return <Spinner />
   }
 
-  const handleExit = () => {
-    localStorage.clear()
-    dispatch(changeStatus("loading"))
-    navigate("/")
-  }
-
   return (
-    <Box sx={{overflowX: "scroll"}}>
-      <Button
-          variant="contained"
-          color="primary"
-          onClick={handleExit}
-      >
-          Выйти
-      </Button>
+    <>
       <TableComponent data={docs} />
       <IconButton
         aria-label="add"
@@ -64,7 +52,7 @@ const Table = () => {
         <AddCircleIcon fontSize="large"/>
       </IconButton>
       <ModalDialog open={isOpen} handleClose={handleClose} />
-    </Box>
+    </>
   )
 }
 export default Table
