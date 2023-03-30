@@ -12,8 +12,8 @@ export interface Doc {
   documentName: string,
   companySignatureName: string,
   employeeSignatureName: string,
-  employeeSigDate: string,
-  companySigDate: string,
+  employeeSigDate?: string,
+  companySigDate?: string,
 }
 
 export const fetchDocs = createAsyncThunk("docs/fetchDocs", async (token: string | undefined) => {

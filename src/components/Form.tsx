@@ -2,10 +2,14 @@ import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react"
 import { Button, TextField } from "@mui/material"
 import { addDoc, changeStatus, editDoc, Doc } from "../features/docsSlice"
 import { useAppDispatch } from "../redux/redux"
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Dayjs } from 'dayjs'
 
 interface Props {
   handleClose: () => void,
-  data: Doc,
+  data: any,
 }
 
 const Form = ({ handleClose, data }: Props) => {
@@ -24,6 +28,9 @@ const Form = ({ handleClose, data }: Props) => {
     companySigDate: event.toISOString(),
   })
 
+  const [employeeSigDate, setEmployeeSigDate] = useState<Dayjs | null>(null)
+  const [companySigDate, setCompanySigDate] = useState<Dayjs | null>(null)
+
   const [mode, setMode] = useState("add")
 
   useEffect(() => {
@@ -39,7 +46,34 @@ const Form = ({ handleClose, data }: Props) => {
 
     if (mode === "add") {
       dispatch(changeStatus("loading"))
-      dispatch(addDoc(formData))
+
+      if (employeeSigDate && companySigDate) {
+        const newData = {
+          ...formData,
+          employeeSigDate: employeeSigDate?.toISOString(),
+          companySigDate: companySigDate?.toISOString(),
+        }
+
+        dispatch(addDoc(newData))
+      } else if (employeeSigDate) {
+        const newData = {
+          ...formData,
+          employeeSigDate: employeeSigDate?.toISOString(),
+        }
+
+        dispatch(addDoc(newData))
+      } else if (companySigDate) {
+        const newData = {
+          ...formData,
+          companySigDate: companySigDate?.toISOString(),
+        }
+
+        dispatch(addDoc(newData))
+      } else {
+        dispatch(addDoc(formData))
+      }
+
+
     } else if (mode === "edit") {
       dispatch(changeStatus("loading"))
       dispatch(editDoc(formData))
@@ -112,10 +146,28 @@ const Form = ({ handleClose, data }: Props) => {
         name="employeeSignatureName"
         variant="filled"
         required
-        fullWidth sx={{margin: "1rem", width: 300}}
+        fullWidth
+        sx={{margin: "1rem", width: 300}}
         onChange={handleChange}
         value={formData.employeeSignatureName}
       />
+      {mode === "add" &&
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+           sx={{margin: "1rem", width: 300}}
+           label="employeeSigDate"
+           value={employeeSigDate}
+           onChange={(newValue) => setEmployeeSigDate(newValue)}
+         />
+
+         <DatePicker
+           sx={{margin: "1rem", width: 300}}
+           label="companySigDate"
+           value={companySigDate}
+           onChange={(newValue) => setCompanySigDate(newValue)}
+         />
+       </LocalizationProvider>
+      }
       <div>
         <Button
           variant="contained"
