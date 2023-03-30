@@ -31,9 +31,9 @@ const TableComponent = ({data}: Props) => {
   }
 
   const handleDelete = (doc: Doc) => {
+    dispatch(changeStatus("loading"))
     dispatch(deleteDoc(doc))
     dispatch(docDeleted(doc))
-    dispatch(changeStatus("loading"))
   }
 
   const getDocument = (doc: Doc) => {
