@@ -114,6 +114,9 @@ export const docsSlice = createSlice({
       state.docs.push(action.payload.data)
       state.status = "ready"
     })
+    .addCase(deleteDoc.fulfilled, (state, action) => {
+      state.status = "ready"
+    })
     .addCase(editDoc.fulfilled, (state, action) => {
       const { id } = action.payload
       action.payload.employeeSigDate = new Date().toISOString()

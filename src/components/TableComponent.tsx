@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material/';
 import ModalDialog from "../components/ModalDialog"
-import { deleteDoc, Doc, docDeleted } from "../features/docsSlice"
+import { changeStatus, deleteDoc, Doc, docDeleted } from "../features/docsSlice"
 import { useAppDispatch, useAppSelector } from '../redux/redux';
 
 interface Props {
@@ -33,6 +33,7 @@ const TableComponent = ({data}: Props) => {
   const handleDelete = (doc: Doc) => {
     dispatch(deleteDoc(doc))
     dispatch(docDeleted(doc))
+    dispatch(changeStatus("loading"))
   }
 
   const getDocument = (doc: Doc) => {
