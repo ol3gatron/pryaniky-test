@@ -83,6 +83,9 @@ export const docsSlice = createSlice({
       const docs = state.docs.filter((doc) => doc.id !== id)
       console.log(action.payload)
       state.docs = [...docs, action.payload]
+    },
+    changeStatus: (state, action) => {
+      state.status = action.payload
     }
   },
   extraReducers(builder) {
@@ -93,6 +96,7 @@ export const docsSlice = createSlice({
     })
     .addCase(addDoc.fulfilled, (state, action) => {
       state.docs.push(action.payload.data)
+      state.status = "ready"
     })
     .addCase(editDoc.fulfilled, (state, action) => {
       const { id } = action.payload
@@ -102,10 +106,12 @@ export const docsSlice = createSlice({
       const docs = state.docs.filter((doc) => doc.id !== id)
       console.log(action.payload)
       state.docs = [...docs, action.payload]
+
+      state.status = "ready"
     })
   },
 })
 
 export default docsSlice.reducer
 
-export const { docAdded, docEdit, docDeleted } = docsSlice.actions
+export const { docAdded, docEdit, docDeleted, changeStatus } = docsSlice.actions

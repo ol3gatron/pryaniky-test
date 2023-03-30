@@ -1,6 +1,6 @@
 import { Typography, Button, Container, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel } from "@mui/material"
 import { useEffect, useState } from "react"
-import { addDoc, docAdded, docEdit, editDoc } from "../features/docsSlice"
+import { addDoc, changeStatus, docAdded, docEdit, editDoc } from "../features/docsSlice"
 import { useAppDispatch } from "../redux/redux"
 
 interface Props {
@@ -38,8 +38,10 @@ const Form = ({ handleClose, data }: Props) => {
     e.preventDefault()
     handleClose()
     if (mode === "add") {
+      dispatch(changeStatus("loading"))
       dispatch(addDoc(formData))
     } else if (mode === "edit") {
+      dispatch(changeStatus("loading"))
       dispatch(editDoc(formData))
     }
   }
