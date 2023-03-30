@@ -40,6 +40,8 @@ const Form = ({ handleClose, data }: Props) => {
     }
   }, [])
 
+
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     handleClose()
@@ -72,11 +74,37 @@ const Form = ({ handleClose, data }: Props) => {
       } else {
         dispatch(addDoc(formData))
       }
-
-
     } else if (mode === "edit") {
       dispatch(changeStatus("loading"))
-      dispatch(editDoc(formData))
+      // dispatch(editDoc(formData))
+
+      if (employeeSigDate && companySigDate) {
+        const newData = {
+          ...formData,
+          employeeSigDate: employeeSigDate?.toISOString(),
+          companySigDate: companySigDate?.toISOString(),
+        }
+
+        console.log(newData)
+
+        dispatch(editDoc(newData))
+      } else if (employeeSigDate) {
+        const newData = {
+          ...formData,
+          employeeSigDate: employeeSigDate?.toISOString(),
+        }
+
+        dispatch(editDoc(newData))
+      } else if (companySigDate) {
+        const newData = {
+          ...formData,
+          companySigDate: companySigDate?.toISOString(),
+        }
+
+        dispatch(editDoc(newData))
+      } else {
+        dispatch(editDoc(formData))
+      }
     }
   }
 
@@ -151,15 +179,13 @@ const Form = ({ handleClose, data }: Props) => {
         onChange={handleChange}
         value={formData.employeeSignatureName}
       />
-      {mode === "add" &&
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
+          <DatePicker
            sx={{margin: "1rem", width: 300}}
            label="employeeSigDate"
            value={employeeSigDate}
            onChange={(newValue) => setEmployeeSigDate(newValue)}
          />
-
          <DatePicker
            sx={{margin: "1rem", width: 300}}
            label="companySigDate"
@@ -167,7 +193,6 @@ const Form = ({ handleClose, data }: Props) => {
            onChange={(newValue) => setCompanySigDate(newValue)}
          />
        </LocalizationProvider>
-      }
       <div>
         <Button
           variant="contained"

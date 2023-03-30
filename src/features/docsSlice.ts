@@ -93,8 +93,6 @@ export const docsSlice = createSlice({
     },
     docEdit: (state, action) => {
       const { id } = action.payload
-      action.payload.employeeSigDate = new Date().toISOString()
-      action.payload.companySigDate = new Date().toISOString()
 
       const docs = state.docs.filter((doc) => doc.id !== id)
       console.log(action.payload)
@@ -119,8 +117,6 @@ export const docsSlice = createSlice({
     })
     .addCase(editDoc.fulfilled, (state, action) => {
       const { id } = action.payload
-      action.payload.employeeSigDate = new Date().toISOString()
-      action.payload.companySigDate = new Date().toISOString()
 
       const docs = state.docs.filter((doc) => doc.id !== id)
       state.docs = [...docs, action.payload]
