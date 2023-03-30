@@ -1,4 +1,5 @@
 import Table from '@mui/material/Table';
+import { useState } from 'react';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,12 +10,10 @@ import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material/';
 import ModalDialog from "../components/ModalDialog"
 import { deleteDoc, Doc, docDeleted } from "../features/docsSlice"
 import { useAppDispatch, useAppSelector } from '../redux/redux';
-import { useState } from 'react';
 
 interface Props {
   data: Doc[]
 }
-
 
 const TableComponent = ({data}: Props) => {
   const dispatch = useAppDispatch()

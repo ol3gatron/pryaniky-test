@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Spinner from "../components/Spinner"
 import TableComponent from "../components/TableComponent"
-import { fetchDocs, Doc } from "../features/docsSlice"
+import { fetchDocs } from "../features/docsSlice"
 import { useAppDispatch, useAppSelector } from "../redux/redux"
 import Box from '@mui/material/Box';
 import ModalDialog from "../components/ModalDialog"

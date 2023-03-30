@@ -17,33 +17,55 @@ export interface Doc {
 }
 
 export const fetchDocs = createAsyncThunk("docs/fetchDocs", async (token: string | undefined) => {
-  const res = await axios.get(`${HOST}/ru/data/v3/testmethods/docs/userdocs/get`,
+  try {
+    const res = await axios.get(`${HOST}/ru/data/v3/testmethods/docs/userdocs/get`,
     {headers: {
       "x-auth": token
-    }})
+      }
+    })
+
     return res.data
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 export const addDoc = createAsyncThunk("docs/addDoc", async (doc: Doc) => {
-  const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/create`, doc, {headers : {"x-auth": token}})
+  try {
+    const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/create`, doc,
+    {headers: {
+      "x-auth": "supersecrettoken_for_user13"
+      }
+    })
 
-  return res.data
+    return res.data
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 export const deleteDoc = createAsyncThunk("docs/deleteDoc", async (doc: Doc) => {
   try {
-    const res = await axios.delete(`${HOST}/ru/data/v3/testmethods/docs/userdocs/delete/${doc.id}`, {headers: {"x-auth": "supersecrettoken_for_user13"}})
+    const res = await axios.delete(`${HOST}/ru/data/v3/testmethods/docs/userdocs/delete/${doc.id}`,
+    {headers: {
+      "x-auth": token
+      }
+    })
 
     return res.data
   } catch (error) {
-    return error
+    console.log(error)
   }
 
 })
 
 export const editDoc = createAsyncThunk("docs/editDoc", async (doc: Doc) => {
   try {
-    const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/set/${doc.id}`, doc, {headers : {"x-auth": token}})
+    const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/set/${doc.id}`, doc,
+    {headers: {
+      "x-auth": token
+      }
+    })
 
     return res.data.data
   } catch (error) {
@@ -56,8 +78,6 @@ interface DocsState {
   status: "loading" | "ready"
 }
 
-const event = new Date()
-
 const initialState: DocsState = {
   docs: [],
   status: "loading"
@@ -67,10 +87,6 @@ export const docsSlice = createSlice({
   name: "docs",
   initialState,
   reducers: {
-    docAdded: (state, action) => {
-      action.payload.id = nanoid()
-      state.docs.push(action.payload)
-    },
     docDeleted: (state, action) => {
       const docs = state.docs.filter((doc) => doc.id !== action.payload.id)
       state.docs = docs
@@ -104,9 +120,7 @@ export const docsSlice = createSlice({
       action.payload.companySigDate = new Date().toISOString()
 
       const docs = state.docs.filter((doc) => doc.id !== id)
-      console.log(action.payload)
       state.docs = [...docs, action.payload]
-
       state.status = "ready"
     })
   },
@@ -114,4 +128,4 @@ export const docsSlice = createSlice({
 
 export default docsSlice.reducer
 
-export const { docAdded, docEdit, docDeleted, changeStatus } = docsSlice.actions
+export const { docEdit, docDeleted, changeStatus } = docsSlice.actions

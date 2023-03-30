@@ -23,10 +23,12 @@ export const sendLoginData = createAsyncThunk("auth/sendLoginData", async (login
     const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/login`, loginData,
     {headers: {
       "Content-Type": "application/json"
-    }})
+      }
+    })
+
     return res.data
   } catch (error) {
-    // return console.log(error)
+    console.log(error)
   }
 })
 
@@ -34,7 +36,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<string>) => {
+    setUser: (state, action) => {
       state.username = action.payload
     }
   },

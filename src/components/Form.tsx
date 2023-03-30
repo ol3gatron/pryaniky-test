@@ -1,18 +1,17 @@
-import { Typography, Button, Container, TextField, RadioGroup, Radio, FormControlLabel, FormControl, FormLabel } from "@mui/material"
-import { useEffect, useState } from "react"
-import { addDoc, changeStatus, docAdded, docEdit, editDoc } from "../features/docsSlice"
+import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react"
+import { Button, TextField } from "@mui/material"
+import { addDoc, changeStatus, editDoc, Doc } from "../features/docsSlice"
 import { useAppDispatch } from "../redux/redux"
 
 interface Props {
   handleClose: () => void,
-  data: any,
+  data: Doc,
 }
 
 const Form = ({ handleClose, data }: Props) => {
   const dispatch = useAppDispatch()
 
   const event = new Date()
-  const token = localStorage.getItem("token")?.slice(1, 28)
 
   const [formData, setFormData] = useState({
     documentStatus: "",
@@ -28,15 +27,16 @@ const Form = ({ handleClose, data }: Props) => {
   const [mode, setMode] = useState("add")
 
   useEffect(() => {
-    if (data && data.id.length > 1) {
+    if (data && data.documentName.length > 0) {
       setMode("edit")
       setFormData(data)
     }
   }, [])
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
     handleClose()
+
     if (mode === "add") {
       dispatch(changeStatus("loading"))
       dispatch(addDoc(formData))
@@ -46,7 +46,7 @@ const Form = ({ handleClose, data }: Props) => {
     }
   }
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [e.target.name]: e.target.value
@@ -116,21 +116,6 @@ const Form = ({ handleClose, data }: Props) => {
         onChange={handleChange}
         value={formData.employeeSignatureName}
       />
-      {/* <TextField
-        label="employeeSigDate"
-        name="employeeSigDate"
-        variant="filled"
-        required
-        fullWidth
-        sx={{margin: "1rem", width: 300}}
-      />
-      <TextField
-        label="companySigDate"
-        name="companySigDate"
-        variant="filled"
-        required
-        fullWidth sx={{margin: "1rem", width: 300}}
-      /> */}
       <div>
         <Button
           variant="contained"
