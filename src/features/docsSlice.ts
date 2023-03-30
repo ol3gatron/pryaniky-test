@@ -41,6 +41,16 @@ export const deleteDoc = createAsyncThunk("docs/deleteDoc", async (doc: Doc) => 
 
 })
 
+export const editDoc = createAsyncThunk("docs/editDoc", async (doc: Doc) => {
+  try {
+    const res = await axios.post(`${HOST}/ru/data/v3/testmethods/docs/userdocs/set/${doc.id}`, doc, {headers : {"x-auth": token}})
+
+    return res.data.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 interface DocsState {
   docs: Doc[],
   status: "loading" | "ready"
@@ -49,75 +59,8 @@ interface DocsState {
 const event = new Date()
 
 const initialState: DocsState = {
-  docs: [
-    {
-      id: nanoid(),
-      documentStatus: "ready",
-      employeeNumber: "hired",
-      documentType: "decree",
-      documentName: "yeah",
-      companySignatureName: "pryaniky",
-      employeeSignatureName: "oleg",
-      employeeSigDate: event.toISOString(),
-      companySigDate: event.toISOString(),
-    },
-    {
-      id: nanoid(),
-      documentStatus: "ready",
-      employeeNumber: "hired",
-      documentType: "decree",
-      documentName: "yeah",
-      companySignatureName: "pryaniky",
-      employeeSignatureName: "oleg",
-      employeeSigDate: event.toISOString(),
-      companySigDate: event.toISOString(),
-    },
-    {
-      id: nanoid(),
-      documentStatus: "ready",
-      employeeNumber: "hired",
-      documentType: "decree",
-      documentName: "yeah",
-      companySignatureName: "pryaniky",
-      employeeSignatureName: "oleg",
-      employeeSigDate: event.toISOString(),
-      companySigDate: event.toISOString(),
-    },
-    {
-      id: nanoid(),
-      documentStatus: "ready",
-      employeeNumber: "hired",
-      documentType: "decree",
-      documentName: "yeah",
-      companySignatureName: "pryaniky",
-      employeeSignatureName: "oleg",
-      employeeSigDate: event.toISOString(),
-      companySigDate: event.toISOString(),
-    },
-    {
-      id: nanoid(),
-      documentStatus: "ready",
-      employeeNumber: "hired",
-      documentType: "decree",
-      documentName: "yeah",
-      companySignatureName: "pryaniky",
-      employeeSignatureName: "oleg",
-      employeeSigDate: event.toISOString(),
-      companySigDate: event.toISOString(),
-    },
-    {
-      id: nanoid(),
-      documentStatus: "ready",
-      employeeNumber: "hired",
-      documentType: "decree",
-      documentName: "yeah",
-      companySignatureName: "pryaniky",
-      employeeSignatureName: "oleg",
-      employeeSigDate: event.toISOString(),
-      companySigDate: event.toISOString(),
-    },
-  ],
-  status: "ready"
+  docs: [],
+  status: "loading"
 }
 
 export const docsSlice = createSlice({
@@ -151,7 +94,14 @@ export const docsSlice = createSlice({
     .addCase(addDoc.fulfilled, (state, action) => {
       state.docs.push(action.payload.data)
     })
-    .addCase(deleteDoc.fulfilled, (state, action) => {
+    .addCase(editDoc.fulfilled, (state, action) => {
+      const { id } = action.payload
+      action.payload.employeeSigDate = new Date().toISOString()
+      action.payload.companySigDate = new Date().toISOString()
+
+      const docs = state.docs.filter((doc) => doc.id !== id)
+      console.log(action.payload)
+      state.docs = [...docs, action.payload]
     })
   },
 })
